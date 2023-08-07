@@ -24,7 +24,9 @@ class BaseModel:
                 if key == "created_at" or key == "updated_at":
                     setattr(self, key, datetime.strptime(value,
                             "%Y-%m-%dT%H:%M:%S.%f"))
-                elif key != "__class__":
+                elif key == "__class__":
+                    continue
+                else:
                     setattr(self, key, value)
         else:
             self.id = str(uuid.uuid4())
@@ -43,7 +45,8 @@ class BaseModel:
         models.storage.save()
 
     def to_dict(self):
-        self.__dict__["__class__"] = __class__.__name__
-        self.__dict__["created_at"] = self.created_at.isoformat()
-        self.__dict__["updated_at"] = self.updated_at.isoformat()
-        return self.__dict__
+        new_dict = self.__dict__.copy()
+        new_dict["__class__"] = __class__.__name__
+        new_dict["created_at"] = self.created_at.isoformat()
+        new_dict["updated_at"] = self.updated_at.isoformat()
+        return new_dict
