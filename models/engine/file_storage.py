@@ -6,6 +6,7 @@ the storage engine to serialize and deserialize objects
 
 import json
 import os
+from models.base_model import BaseModel
 
 
 class FileStorage:
@@ -23,10 +24,14 @@ class FileStorage:
         self.__objects[key] = obj
 
     def save(self):
-        with open(self.__file_path, "w", encoding="utf-8") as f: 
-            json.dump(self.__objects, f)
+        obj_dic = {key: value.to_dict() for key, value in self.__objects.items()}
+        with open(self.__file_path, "w", encoding="utf-8") as f:
+            json.dump(obj_dic, f)
 
     def reload(self):
         if os.path.exists(self.__file_path):
             with open(self.__file_path, "r", encoding="utf-8") as f:
-                self.__objects = json.load(f)
+                json_dict = json.load(f)
+
+                for key, value in json_dict.items():
+                    self.__objects[key] = eval(value['__class__'])(**value)
