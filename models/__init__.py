@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-updating init to create a unique file storage
+the initialize file
 """
 
 

@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 """
-the storage engine to serialize and deserialize objects
+first storage engine
 """
 
 
 import json
-import os
 from models.base_model import BaseModel
+import os
 
 
 class FileStorage:
@@ -17,21 +17,37 @@ class FileStorage:
     __objects = {}
 
     def all(self):
-        return self.__objects
+        """
+        returns the dictiory of Objects
+        """
+        return FileStorage.__objects
 
     def new(self, obj):
+        """
+        adds the new model to the objects
+        """
         key = f"{obj.__class__.__name__}.{obj.id}"
-        self.__objects[key] = obj
+        FileStorage.__objects[key] = obj
 
     def save(self):
-        obj_dic = {key: value.to_dict() for key, value in FileStorage.__objects.items()}
-        with open(self.__file_path, "w", encoding="utf-8") as f:
-            json.dump(obj_dic, f)
+        """
+        serialize the object to dictionary and save to file
+        """
+        obj_dict = {}
+        for key, value in FileStorage.__objects.items():
+            obj_dict[key] = value.to_dict()
+        with open(FileStorage.__file_path, "w", encoding="utf-8") as f:
+            json.dump(obj_dict, f)
 
     def reload(self):
-        if os.path.exists(self.__file_path):
-            with open(self.__file_path, "r", encoding="utf-8") as f:
-                json_dict = json.load(f)
+        """
+        reloads objects from file to __objects
+        """
+        if os.path.exists(FileStorage.__file_path):
+            with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
+                obj_dict = json.load(f)
+                for key, value in obj_dict.items():
+                    cl_obj = eval(value["__class__"])(**value)
+                    FileStorage.__objects[key] = cl_obj
 
-                for key, value in json_dict.items():
-                    self.__objects[key] = eval(value['__class__'])(**value)
+
