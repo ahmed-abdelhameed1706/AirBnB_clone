@@ -54,10 +54,6 @@ class HBNBCommand(cmd.Cmd):
     the main class of the project
     """
     prompt = "(hbnb) "
-    _classes = {
-        "BaseModel": BaseModel,
-        "User": User,
-        }
 
     def do_EOF(self, line):
         """
@@ -77,6 +73,26 @@ class HBNBCommand(cmd.Cmd):
         does nothing
         """
         pass
+    
+    def default(self, line): # Still working on this
+        """
+        default function gets called when
+        no other existing input gets entered
+        """
+        methods = {
+                "all()": self.do_all
+                }
+        args = line.split(".")
+        if args[0] not in _classes:
+            print("Invalid Input")
+        elif args[1] in methods:
+            methods[args[1]](args[0])
+        elif args[1] == "count()":
+            cls_list = self.do_all(args[0])
+            count = len(cls_list)
+            print(count)
+        else:
+            print(f"Class {args[0]} doesnt have method {args[1]}")
 
     def do_create(self, line):
         """
