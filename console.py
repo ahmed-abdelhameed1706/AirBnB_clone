@@ -1,124 +1,206 @@
 #!/usr/bin/python3
 """
-the entry point to the console app
+the entry point to the project
 """
 
 
 import cmd
 from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
 from models import storage
 import re
 
 
-classes = ["BaseModel"]
+_classes = {
+        "BaseModel": BaseModel,
+        "User": User,
+        "State": State,
+        "City": City,
+        "Place": Place,
+        "Amenity": Amenity,
+        "Review": Review
+        }
+
 
 def parse(line):
+    """
+    Parses an inpute and returns a list of strings
+    """
     return re.findall(r'"(?:\\"|.)*?"|\S+', line)
+
+def validate(line):
+    """
+    Validates and casts the input value to the
+    appropriate attribute type
+    """
+    if (line[0] == '-' and line[1:].isnumeric()) or line.isnumeric():
+        return int(line)
+    elif (line[0] == '-' and (all(char.isdigit() or char == '.') for char in line[1:])) and line.count('.') == 1:
+        return float(line)
+    elif all(char.isdigit() or char == '.' for char in line) \
+            and line.count('.') == 1:
+        return float(line)
+    else:
+        return str(line)
+
 
 class HBNBCommand(cmd.Cmd):
     """
-    the man cmd class
+    the main class of the project
     """
-    prompt = '(hbnb) '
+    prompt = "(hbnb) "
+    _classes = {
+        "BaseModel": BaseModel,
+        "User": User,
+        }
 
     def do_EOF(self, line):
         """
-        end of file signal to quit the program
+        Quits the program when you press ctrl + D
         """
         print()
         return True
 
     def do_quit(self, line):
         """
-        quit command to quit the program
+        Quits the program when you type quit and press enter
         """
         return True
 
-    #def do_help(self, line):
-        #"""
-        #helps you know the docstring of a function
-        #"""
-        #return line.__doc__
-
     def emptyline(self):
+        """
+        does nothing
+        """
         pass
 
     def do_create(self, line):
         """
-        creates a new instance of BaseModel
-        Usuage: create BaseModel
+        Create a new Instance of selected Model
+        Usage: create <Class Name>
         """
-        if len(line) == 0:
+        args = parse(line)
+        if len(args) == 0:
             print("** class name missing **")
-        elif line not in classes:
+        elif args[0] not in _classes.keys():
             print("** class doesn't exist **")
         else:
-            my_model = BaseModel()
-            my_model.save()
-            print(my_model.id)
+            new_model = eval(args[0])()
+            new_model.save()
+            print(new_model.id)
 
     def do_show(self, line):
         """
-        prints the string represntation of an instance based
-        on the class name and id
-        Usuage: show BaseModel 123123-13-412312-1312
+        Prints the string representation of an instance
+        based on the class name and id.
+        Usage: show <Class Name> <Instance Id>
         """
         args = parse(line)
         model_list = storage.all()
-
         if len(args) == 0:
             print("** class name missing **")
-        elif args[0] not in classes:
+        elif args[0] not in _classes.keys():
             print("** class doesn't exist **")
         elif len(args) == 1:
             print("** instance id missing **")
+        elif f"{args[0]}.{args[1]}" not in model_list.keys():
+            print("** no instance found **")
         else:
-            look_up_model = f"{args[0]}.{args[1]}"
-            if look_up_model not in model_list:
-                print("** no instance found **")
-            else:
-                print(model_list[look_up_model])
+            key = f"{args[0]}.{args[1]}"
+            value = model_list[key]
+            print(value)
 
     def do_destroy(self, line):
         """
-        deletes an instance based
-        on the class name and id
-        Usuage: destroy BaseModel 123123-13-412312-1312
+        Deletes an instance based on the class name and id.
+        Usage: destroy <Class Name> <Instance Id>
         """
         args = parse(line)
         model_list = storage.all()
-
         if len(args) == 0:
             print("** class name missing **")
-        elif args[0] not in classes:
+        elif args[0] not in _classes.keys():
             print("** class doesn't exist **")
         elif len(args) == 1:
             print("** instance id missing **")
+        elif f"{args[0]}.{args[1]}" not in model_list.keys():
+            print("** no instance found **")
         else:
-            look_up_model = f"{args[0]}.{args[1]}"
-            if look_up_model not in model_list:
-                print("** no instance found **")
-            else:
-                del(model_list[look_up_model])
-                storage.save()
+            key = f"{args[0]}.{args[1]}"
+            del(model_list[key])
+            storage.save()
 
     def do_all(self, line):
         """
-        prints all instance representation based or not
-        Usage: all OR all BaseModel
+         Prints all string representation of all instances
+         based or not on the class name.
+         Usage: all OR all <Class Name>
         """
         args = parse(line)
         model_list = storage.all()
-
+        obj_list = []
         if len(args) == 0:
-            for model in model_list:
-                print(model_list[model])
-        elif args[0] not in classes:
+            for key in model_list:
+                str_value = str(model_list[key])
+                obj_list.append(str_value)
+            print(obj_list)
+        elif args[0] not in _classes.keys():
             print("** class doesn't exist **")
         else:
-            for model in model_list:
-                if model.split(".")[0] == args[0]:
-                    print(model_list[model])
+            for key in model_list:
+                if key.split(".")[0] == args[0]:
+                    str_value = str(model_list[key])
+                    obj_list.append(str_value)
+            print(obj_list)
+
+    def do_update(self, line):
+        """
+        Updates an instance based on the class name
+        and id by adding or updating attribute
+        Usage: update <class name> <id> <attribute name> "<attribute value>"
+        """
+        args = parse(line)
+        model_list = storage.all()
+        if len(args) == 0:
+            print("** class name missing **")
+        elif args[0] not in _classes.keys():
+            print("** class doesn't exist **")
+        elif len(args) == 1:
+            print("** instance id missing **")
+        elif f"{args[0]}.{args[1]}" not in model_list.keys():
+            print("** no instance found **")
+        elif len(args) == 2:
+            print("** attribute name missing **")
+        elif len(args) == 3:
+            print("** value missing **")
+        else:
+            k = f"{args[0]}.{args[1]}"
+            for key, value in model_list.items():
+                if key == k:
+                    #value_dict = value.to_dict()
+                    #value_dict[args[2]] = args[3][1:-1]
+                    #new_model = eval(value_dict["__class__"])(**value_dict)
+                    #model_list[key] = new_model
+                    setattr(value, args[2], args[3][1:-1])
+            model_list[k].save()
+
+
+
+
+    def do_debug(self, line):
+        """
+        custom function used for further invistgation
+        """
+        model_list = storage.all()
+        for key, value in model_list.items():
+            print(key, model_list[key])
+        
+
+
 
 
 if __name__ == '__main__':
