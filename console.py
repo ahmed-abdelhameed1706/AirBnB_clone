@@ -33,6 +33,7 @@ def parse(line):
     """
     return re.findall(r'"(?:\\"|.)*?"|\S+', line)
 
+
 def validate(line):
     """
     Validates and casts the input value to the
@@ -40,7 +41,10 @@ def validate(line):
     """
     if (line[0] == '-' and line[1:].isnumeric()) or line.isnumeric():
         return int(line)
-    elif (line[0] == '-' and (all(char.isdigit() or char == '.') for char in line[1:])) and line.count('.') == 1:
+    elif (
+            (line[0] == '-' and
+                (all(char.isdigit() or char == '.') for char in line[1:]))
+            and line.count('.') == 1):
         return float(line)
     elif all(char.isdigit() or char == '.' for char in line) \
             and line.count('.') == 1:
@@ -73,8 +77,8 @@ class HBNBCommand(cmd.Cmd):
         does nothing
         """
         pass
-    
-    def default(self, line): # Still working on this
+
+    def default(self, line):   # Still working on this
         """
         default function gets called when
         no other existing input gets entered
@@ -197,15 +201,8 @@ class HBNBCommand(cmd.Cmd):
             k = f"{args[0]}.{args[1]}"
             for key, value in model_list.items():
                 if key == k:
-                    #value_dict = value.to_dict()
-                    #value_dict[args[2]] = args[3][1:-1]
-                    #new_model = eval(value_dict["__class__"])(**value_dict)
-                    #model_list[key] = new_model
-                    setattr(value, args[2], args[3][1:-1])
+                    setattr(value, args[2], validate(args[3][1:-1]))
             model_list[k].save()
-
-
-
 
     def do_debug(self, line):
         """
@@ -213,10 +210,9 @@ class HBNBCommand(cmd.Cmd):
         """
         model_list = storage.all()
         for key, value in model_list.items():
-            print(key, model_list[key])
-        
-
-
+            print(key, value)
+            for k, v in value.to_dict().items():
+                print(k, v, type(v))
 
 
 if __name__ == '__main__':
