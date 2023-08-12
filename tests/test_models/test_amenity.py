@@ -1,121 +1,127 @@
 #!/usr/bin/python3
 """
-test modules for Amenity
+Test Module for Amenity
 """
 
 
-import unittest
-from models.amenity import Amenity
-from datetime import datetime
 import uuid
-import models
+from models.amenity import Amenity
+import unittest
+from datetime import datetime
 import time
+import models
 
 
 class TestAmenity(unittest.TestCase):
-	"""
-	the main test class for amenity
-	"""
-	def test_init_with_no_kwargs(self):
-		"""
-		tests if an instance is created with no args
-		and checks attribute types
-		"""
-		instance1 = Amenity()
-		time.sleep(0.5)
-		instance2 = Amenity()
+    """
+    Test cases for the amenity class
+    """
+    def init_amenity_with_no_kwargs(self):
+        """
+        tests to see if everything is working when
+        a new amenity is initialized
+        """
+        amen1 = Amenity()
+        time.sleep(0.1)
+        amen2 = Amenity()
 
-		self.assertEqual(type(instance1), Amenity)
-		self.assertEqual(type(instance2), Amenity)
-		self.assertNotEqual(instance1.id, instance2.id)
-		self.assertEqual(type(instance1.created_at), datetime)
-		self.assertEqual(type(instance1.updated_at), datetime)
-		self.assertEqual(type(instance1.id), str)
-		self.assertIn(instance1, models.storage.all().values())
-		self.assertIn(instance2, models.storage.all().values())
-		self.assertLess(instance1.created_at, instance2.created_at)
-		self.assertLess(instance1.updated_at, instance2.updated_at)
+        self.assertEqual(type(amen1), Amenity)
+        self.assertEqual(type(amen2), Amenity)
+        self.assertNotEqual(amen1.id, amen2.id)
+        self.assertEqual(type(amen1.created_at), datetime)
+        self.assertEqual(type(amen1.updated_at), datetime)
+        self.assertEqual(type(amen1.id), str)
+        self.assertIn(amen1, models.storage.all().values())
+        self.assertIn(amen2, models.storage.all().values())
+        self.assertLess(amen1.created_at, amen2.created_at)
+        self.assertLess(amen1.updated_at, amen2.updated_at)
+        self.assertEqual(type(amen1.name), str)
+        self.assertEqual(amen1.name, "")
+        self.assertEqual(amen2.name, "")
 
-	def test_init_with_kwargs(self):
-		"""
-		tests if an instance is created with kwargs
-		and checks attributes
-		"""
-		kwargs = {
-				"id": str(uuid.uuid4()),
-				"created_at": datetime.now().isoformat(),
-				"updated_at": datetime.now().isoformat()
-				}
-		testformat = "%Y-%m-%dT%H:%M:%S.%f"
-		instance1 = Amenity(**kwargs)
+    def init_amenity_from_kwargs(self):
+        """
+        initialize an instance from kwargs
+        """
+        kwargs = {
+                "id": uuid.uuid4(),
+                "created_at": datetime.now(),
+                "updated_at": datetime.now(),
+                "name": "Ahmed"
+                }
 
-		self.assertEqual(type(instance1), Amenity)
-		self.assertEqual(type(instance1.created_at), datetime)
-		self.assertEqual(type(instance1.updated_at), datetime)
-		self.assertEqual(type(instance1.id), str)
-		self.assertEqual(instance1.id, kwargs["id"])
-		self.assertEqual(
-				instance1.created_at,
-				datetime.strptime(kwargs["created_at"], testformat)
-				)
-		self.assertEqual(
-				instance1.updated_at,
-				datetime.strptime(kwargs["updated_at"], testformat)
-				)
-		with self.assertRaises(TypeError):
-			Amenity(id=None, created_at=None, updated_at=None)
+        testformat = "%Y-%m-%dT%H:%M:%S.%f"
+        amen1 = Amenity(**kwargs)
 
-	def test_str_repr(self):
-		"""
-		checks if the str returns the correct output
-		"""
-		inst1 = Amenity()
-		rslt = f"[{inst1.__class__.__name__}] ({inst1.id}) {inst1.__dict__}"
-		self.assertEqual(str(inst1), rslt)
-	def test_save(self):
-		"""
-		test saving the model
-		"""
-		instance1 = Amenity()
-		updated_at = instance1.updated_at
-		time.sleep(0.1)
-		instance1.save()
-		updated_at1 = instance1.updated_at
-		time.sleep(0.1)
-		instance1.save()
-		self.assertLess(updated_at, updated_at1)
-		self.assertLess(updated_at1, instance1.updated_at)
+        self.assertEqual(type(amen1), Amenity)
+        self.assertEqual(type(amen1.created_at), datetime)
+        self.assertEqual(type(amen1.updated_at), datetime)
+        self.assertEqual(type(amen1.id), str)
+        self.assertEqual(amen1.id, kwargs["id"])
+        self.assertEqual(
+                amen1.created_at,
+                datetime.strptime(kwargs["created_at"], testformat)
+                )
+        self.assertEqual(
+                amen1.updated_at,
+                datetime.strptime(kwargs["updated_at"], testformat)
+                )
+        with self.assertRaises(TypeError):
+            Amenity(id=None, created_at=None, updated_at=None)
 
-	def test_to_dict(self):
-		"""
-		tests turning the model into dict
-		"""
-		instance1 = Amenity()
-		instance_dict = instance1.to_dict()
+    def test_str_repr(self):
+        """
+        checks if the str returns the correct output
+        """
+        amen1 = Amenity()
+        rslt = f"[{amen1.__class__.__name__}] ({amen1.id}) {amen1.__dict__}"
+        self.assertEqual(str(amen1), rslt)
 
-		self.assertEqual(instance_dict["id"], instance1.id)
-		self.assertEqual(
-				instance_dict["created_at"],
-				instance1.created_at.isoformat())
-		self.assertEqual(
-				instance_dict["updated_at"],
-				instance1.updated_at.isoformat())
-		self.assertIn("__class__", instance_dict.keys())
-		self.assertEqual(
-				instance_dict["__class__"], instance1.__class__.__name__)
+    def test_save(self):
+        """
+        test saving the model
+        """
+        amen1 = Amenity()
+        updated_at = amen1.updated_at
+        time.sleep(0.1)
+        amen1.save()
+        updated_at1 = amen1.updated_at
+        time.sleep(0.1)
+        amen1.save()
+        self.assertLess(updated_at, updated_at1)
+        self.assertLess(updated_at1, amen1.updated_at)
 
-	def test_init_with_serialization(self):
-		"""
-		serlialize and desialize models and init with them
-		"""
-		instance1 = Amenity()
-		instance_dict = instance1.to_dict()
-		instance2 = Amenity(**instance_dict)
+    def test_to_dict(self):
+        """
+        tests turning the model into dict
+        """
+        amen1 = Amenity()
+        amen_dict = amen1.to_dict()
 
-		self.assertEqual(instance1.id, instance2.id)
-		self.assertEqual(instance1.created_at, instance2.created_at)
-		self.assertEqual(instance1.updated_at, instance2.updated_at)
+        self.assertEqual(amen_dict["id"], amen1.id)
+        self.assertEqual(
+                amen_dict["created_at"],
+                amen1.created_at.isoformat())
+        self.assertEqual(
+                amen_dict["updated_at"],
+                amen1.updated_at.isoformat())
+        self.assertIn("__class__", amen_dict.keys())
+        self.assertEqual(
+                amen_dict["__class__"], amen1.__class__.__name__)
+
+    def test_init_with_serialization(self):
+        """
+        serlialize and desialize models and init with them
+        """
+        amen1 = Amenity()
+        instance_dict = amen1.to_dict()
+        amen2 = Amenity(**instance_dict)
+
+        self.assertEqual(amen1.id, amen2.id)
+        self.assertEqual(amen1.created_at, amen2.created_at)
+        self.assertEqual(amen1.updated_at, amen2.updated_at)
+        self.assertEqual(amen1.name, amen2.name)
 
 
 if __name__ == "__main__":
-	unittest.main()
+    unittest.main()
