@@ -32,13 +32,24 @@ class BaseModel:
             models.storage.new(self)
 
     def __str__(self):
+        """
+        returns the string representation of the object
+        """
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
     def save(self):
+        """
+        saves the object to the storage and
+        updates the updated at varibale
+        """
         self.updated_at = datetime.now()
         models.storage.save()
 
     def to_dict(self):
+        """
+        returns a dict of the class attributes and
+        modify the timedate objects
+        """
         dict_cp = self.__dict__.copy()
         dict_cp["__class__"] = self.__class__.__name__
         dict_cp["created_at"] = self.created_at.isoformat()

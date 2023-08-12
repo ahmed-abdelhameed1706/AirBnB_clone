@@ -55,5 +55,3 @@ class FileStorage:
                 for key, value in obj_dict.items():
                     cl_obj = eval(value["__class__"])(**value)
                     FileStorage.__objects[key] = cl_obj
-
-
