@@ -12,4 +12,4 @@ class TestStorage(unittest.TestCase):
     """
     this is the test class of the storage
     """
-    Pass
+    pass
