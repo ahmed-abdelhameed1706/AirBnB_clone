@@ -151,7 +151,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
         else:
             key = f"{args[0]}.{args[1]}"
-            del(model_list[key])
+            del (model_list[key])
             storage.save()
 
     def do_all(self, line):
