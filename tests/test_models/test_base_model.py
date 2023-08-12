@@ -69,11 +69,9 @@ class TestBaseModel(unittest.TestCase):
         """
         checks if the str returns the correct output
         """
-        instance1 = BaseModel()
-        self.assertEqual(
-                str(instance1),
-                f"[{instance1.__class__.__name__}] \
-                ({instance1.id}) {instance1.__dict__}")
+        inst1 = BaseModel()
+        rslt = f"[{inst1.__class__.__name__}] ({inst1.id}) {inst1.__dict__}"
+        self.assertEqual(str(inst1), rslt)
 
     def test_save(self):
         """
