@@ -12,4 +12,8 @@ class TestAmenity(unittest.TestCase):
     """
     testing for the class Amenity
     """
-    pass
+    def test_placehold(self):
+        """
+        placeholder for now
+        """
+        pass
