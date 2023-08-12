@@ -9,7 +9,7 @@ to start it you have to type:
 you will then have access to bunch of commands such as:
 
 help - use it to know what each command does
-Usage: help <command>
+Usage: help [command]
 
 all - shows all the objects in database
-Usage: all OR all <Object Name>
+Usage: all OR all []
