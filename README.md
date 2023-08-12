@@ -16,3 +16,13 @@ Usage: all OR all [Object Name]
 
 show - use it to show a specific object at a certain id
 Usage: show [Object Name] [Object Id]
+
+destroy - use it to delete some object from the database storage
+Usage: destroy [Object Name] [Object Id]
+
+update - use it to update an object with new attributes or change
+existing attributes values
+Usage: update [Object Name] [Object Id] [Attribute Name] ["Attribute Value"]
+
+create - use it to create a new instance of an object
+Usage: create [Object Name]
