@@ -11,7 +11,7 @@ import models
 
 class BaseModel:
     """
-    the main class
+    the main class of the project
     """
     def __init__(self, *args, **kwargs):
         """
