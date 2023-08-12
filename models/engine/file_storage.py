@@ -49,7 +49,7 @@ class FileStorage:
         """
         reloads objects from file to __objects
         """
-        if os.path.exists(FileStorage.__file_path):
+        if os.path.isfile(FileStorage.__file_path):
             with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
                 obj_dict = json.load(f)
                 for key, value in obj_dict.items():
