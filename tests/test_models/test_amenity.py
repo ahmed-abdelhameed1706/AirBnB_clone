@@ -17,7 +17,8 @@ class TestAmenity(unittest.TestCase):
         """
         placeholder for now
         """
-        pass
+        amen = Amenity()
+        self.assertEqual(type(amen), Amenity)
 
 
 if __name__ == "__main__":
