@@ -12,4 +12,4 @@ class TestPlace(unittest.TestCase):
     """
     testing for the class Place
     """
-    Pass
+    pass

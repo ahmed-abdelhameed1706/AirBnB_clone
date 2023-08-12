@@ -12,4 +12,4 @@ class TestAmenity(unittest.TestCase):
     """
     testing for the class Amenity
     """
-    Pass
+    pass

@@ -12,4 +12,4 @@ class TestUser(unittest.TestCase):
     """
     testing for the class User
     """
-    Pass
+    pass

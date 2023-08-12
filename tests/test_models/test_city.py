@@ -12,4 +12,4 @@ class TestCity(unittest.TestCase):
     """
     testing for the class City
     """
-    Pass
+    pass
