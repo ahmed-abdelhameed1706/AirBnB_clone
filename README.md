@@ -12,4 +12,7 @@ help - use it to know what each command does
 Usage: help [command]
 
 all - shows all the objects in database
-Usage: all OR all []
+Usage: all OR all [Object Name]
+
+show - use it to show a specific object at a certain id
+Usage: show [Object Name] [Object Id]
