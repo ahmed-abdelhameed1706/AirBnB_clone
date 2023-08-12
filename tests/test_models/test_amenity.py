@@ -12,9 +12,13 @@ class TestAmenity(unittest.TestCase):
     """
     testing for the class Amenity
     """
-    Pass
-    # def test_placehold(self):
-      #  """
-       # placeholder for now
-        # """
-        # pass
+    
+    def test_placehold(self):
+        """
+        placeholder for now
+        """
+        pass
+
+
+if __name__ == "__main__":
+    unittest.main()
