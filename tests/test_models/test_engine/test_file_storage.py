@@ -20,6 +20,8 @@ class TestStorage(unittest.TestCase):
         storage = FileStorage()
 
         self.assertEqual(type(storage), FileStorage)
+        self.assertEqual(type(storage._FileStorage__file_path), str)
+        self.assertEqual(type(storage._FileStorage__objects), dict)
 
     def test_all(self):
         """
