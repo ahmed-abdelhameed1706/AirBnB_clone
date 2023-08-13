@@ -12,11 +12,11 @@ import time
 import models
 
 
-class TestAmenity(unittest.TestCase):
+class TestState(unittest.TestCase):
     """
     Test cases for the amenity class
     """
-    def init_amenity_with_no_kwargs(self):
+    def test_init_state_with_no_kwargs(self):
         """
         tests to see if everything is working when
         a new amenity is initialized
@@ -39,14 +39,14 @@ class TestAmenity(unittest.TestCase):
         self.assertEqual(amen1.name, "")
         self.assertEqual(amen2.name, "")
 
-    def init_amenity_from_kwargs(self):
+    def test_init_state_from_kwargs(self):
         """
         initialize an instance from kwargs
         """
         kwargs = {
-                "id": uuid.uuid4(),
-                "created_at": datetime.now(),
-                "updated_at": datetime.now(),
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.now().isoformat(),
+                "updated_at": datetime.now().isoformat(),
                 "name": "Ahmed"
                 }
 
