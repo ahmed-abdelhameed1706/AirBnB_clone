@@ -66,6 +66,7 @@ class TestAmenity(unittest.TestCase):
                 amen1.updated_at,
                 datetime.strptime(kwargs["updated_at"], testformat)
                 )
+        self.assertEqual(amen1.name, kwargs["name"])
         with self.assertRaises(TypeError):
             Amenity(id=None, created_at=None, updated_at=None)
 
@@ -95,7 +96,7 @@ class TestAmenity(unittest.TestCase):
         """
         tests turning the model into dict
         """
-        amen1 = Amenity()
+        amen1 = Amenity(name="test")
         amen_dict = amen1.to_dict()
 
         self.assertEqual(amen_dict["id"], amen1.id)
@@ -108,12 +109,13 @@ class TestAmenity(unittest.TestCase):
         self.assertIn("__class__", amen_dict.keys())
         self.assertEqual(
                 amen_dict["__class__"], amen1.__class__.__name__)
+        self.assertEqual(amen_dict["name"], amen1.name)
 
     def test_init_with_serialization(self):
         """
         serlialize and desialize models and init with them
         """
-        amen1 = Amenity()
+        amen1 = Amenity(name="test")
         instance_dict = amen1.to_dict()
         amen2 = Amenity(**instance_dict)
 
