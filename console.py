@@ -92,8 +92,11 @@ class HBNBCommand(cmd.Cmd):
         elif args[1] in methods:
             methods[args[1]](args[0])
         elif args[1] == "count()":
-            cls_list = self.do_all(args[0])
-            count = len(cls_list)
+            count = 0
+            obj_list = storage.all()
+            for key in obj_list.keys():
+                if key.split(".")[0] == args[0]:
+                    count += 1
             print(count)
         else:
             print(f"Class {args[0]} doesnt have method {args[1]}")
