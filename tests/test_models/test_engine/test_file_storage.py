@@ -61,6 +61,9 @@ class TestStorage(unittest.TestCase):
             f_read = f.read()
             self.assertIn(rslt, f_read)
 
+        with self.assertRaises(TypeError):
+            storage.save(None)
+
     def test_reload(self):
         """
         test the reload function
