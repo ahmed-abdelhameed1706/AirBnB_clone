@@ -66,6 +66,7 @@
 .filters .amenities:hover .popover {
 	display: block;
 	cursor: pointer;
+	position: relative;
 }
 
 .filters .locations .popover {
