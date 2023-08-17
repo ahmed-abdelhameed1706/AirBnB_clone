@@ -20,6 +20,6 @@
 	margin-right: 30px;
 }
 
-.filter button::hover {
-	opacity: 90%;
+.filter button:hover {
+	opacity: 0.9;
 }
