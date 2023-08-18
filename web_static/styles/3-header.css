@@ -1,10 +1,11 @@
 header {
-	color: #FFFFFF;
-	border-bottom: 1px solid #CCCCCC;
-	height: 70px;
-	width: 100%;
-	background-image: url("../images/logo.png");
+        height: 70px;
+        width: 100%;
+        color: #fff;
+        border-bottom: 1px solid #ccc;
+        background-image: url("../images/logo.png");
+        background-position: left;
         background-size: contain;
-        padding: 0px 0px 0px 20px;
         background-repeat: no-repeat;
+        background-color: #fff;
 }
